@@ -4,4 +4,4 @@ router.get('/test', (req, res) => {
   res.send('User routes working');
 });
 
-module.exports = { userRoutes: router };
+module.exports = router;
