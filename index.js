@@ -7,12 +7,12 @@ const app = express();
 dotenv.config();
 
 // DB connection
-// moongose
-//   .connect(process.env.MONGO_URL)
-//   .then(() => {
-//     console.log('DB Connection Successfull');
-//   })
-//   .catch((error) => console.log(error));
+moongose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log('DB Connection Successfull');
+  })
+  .catch((error) => console.log(error));
 
 // Middlewares
 app.use(express.json());
