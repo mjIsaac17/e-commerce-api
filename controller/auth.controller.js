@@ -1,4 +1,5 @@
 const CryptoJS = require('crypto-js');
+const jwt = require('jsonwebtoken');
 const ApiError = require('../error/apiError');
 const User = require('../models/User.model');
 
@@ -53,7 +54,17 @@ class AuthController {
       }
 
       delete user._doc.password;
-      res.status(200).json({ user });
+
+      const token = jwt.sign(
+        {
+          id: user._id,
+          isAdmin: user.isAdmin
+        },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: '1d' }
+      );
+
+      res.status(200).json({ user: { ...user._doc, token } });
     } catch (error) {
       next(ApiError.internalError(error));
     }
