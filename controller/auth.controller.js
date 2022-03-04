@@ -9,14 +9,12 @@ class AuthController {
       //Validate if username and email already exist
       const username = await User.findOne({ username: req.body.username });
       if (username) {
-        next(ApiError.badRequest('The username already exists'));
-        return;
+        return next(ApiError.badRequest('The username already exists'));
       }
 
       const email = await User.findOne({ email: req.body.email });
       if (email) {
-        next(ApiError.badRequest('The email already exists'));
-        return;
+        return next(ApiError.badRequest('The email already exists'));
       }
 
       // User is valid
@@ -38,8 +36,7 @@ class AuthController {
     try {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
-        next(ApiError.badRequest('Invalid user or password'));
-        return;
+        return next(ApiError.badRequest('Invalid user or password'));
       }
 
       const hashedPassword = CryptoJS.AES.decrypt(
@@ -49,8 +46,7 @@ class AuthController {
       const password = hashedPassword.toString(CryptoJS.enc.Utf8);
 
       if (password !== req.body.password) {
-        next(ApiError.badRequest('Invalid user or password'));
-        return;
+        return next(ApiError.badRequest('Invalid user or password'));
       }
 
       delete user._doc.password;

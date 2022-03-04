@@ -1,32 +1,27 @@
 const jwt = require('jsonwebtoken');
 const ApiError = require('../error/apiError');
 
-const validateToken = (req, res, next) => {
-  const authHeader = req.headers.token;
-  if (authHeader) {
-    jwt.verify('token', process.env.JWT_SECRET_KEY, (error, user) => {
+const verifyToken = (req, res, next) => {
+  const token = req.headers.token;
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (error, user) => {
       if (error) {
-        next(ApiError.invalidToken('Invalid token'));
-        return;
+        return next(ApiError.invalidToken('Invalid token'));
       }
       req.user = user;
       next();
     });
   } else {
-    next(ApiError.unauthorized('You are not authenticated'));
-    return;
+    return next(ApiError.invalidToken('You are not authenticated'));
   }
 };
 
-const verifyTokenAndAuthorization = (req, res, next) => {
-  verifyToken(req, res, () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) {
-      next();
-    } else {
-      next(ApiError.unauthorized('You are not allowed to do that'));
-      return;
-    }
-  });
+const verifyAuth = (req, res, next) => {
+  if (req.user.id === req.params.id || req.user.isAdmin) {
+    next();
+  } else {
+    return next(ApiError.invalidToken('You are not allowed to do that'));
+  }
 };
 
-module.exports = { validateToken, verifyTokenAndAuthorization };
+module.exports = { verifyToken, verifyAuth };

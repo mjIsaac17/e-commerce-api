@@ -8,11 +8,11 @@ router.get('/test', (req, res) => {
 });
 
 // Register
-// router.post(
-//   '/register',
-//   validateSchema(registerSchema),
-//   authController.register
-// );
+router.post(
+  '/register',
+  validateSchema(registerSchema),
+  authController.register
+);
 
 // Login
 router.post('/login', authController.login);

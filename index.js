@@ -1,7 +1,8 @@
 const express = require('express');
 const moongose = require('mongoose');
 const dotenv = require('dotenv');
-const apiErrorHandler = require('./error/apiErrorHandler');
+
+const ApiError = require('./error/apiError');
 const app = express();
 
 dotenv.config();
@@ -21,7 +22,15 @@ app.use(express.json());
 app.use('/api/users', require('./routes/user.routes'));
 app.use('/api/auth', require('./routes/auth.routes'));
 
-app.use(apiErrorHandler);
+// 404 - Invalid route
+app.use('/', (req, res, next) => {
+  next(ApiError.notFound('Route not found'));
+});
+
+// Error handler
+app.use((error, req, res, next) => {
+  return res.status(error.status || 500).json({ error: error.message });
+});
 
 // Run application
 const port = process.env.PORT || 5000;
