@@ -9,19 +9,22 @@ const verifyToken = (req, res, next) => {
         return next(ApiError.invalidToken('Invalid token'));
       }
       req.user = user;
-      next();
+      return next();
     });
-  } else {
-    return next(ApiError.invalidToken('You are not authenticated'));
   }
+  return next(ApiError.invalidToken('You are not authenticated'));
 };
 
 const verifyAuth = (req, res, next) => {
-  if (req.user.id === req.params.id || req.user.isAdmin) {
-    next();
-  } else {
-    return next(ApiError.invalidToken('You are not allowed to do that'));
-  }
+  if (req.user.id === req.params.id || req.user.isAdmin) return next();
+
+  next(ApiError.invalidToken('You are not allowed to do that'));
 };
 
-module.exports = { verifyToken, verifyAuth };
+const verifyIsAdmin = (req, res, next) => {
+  if (req.user.isAdmin) return next();
+
+  next(ApiError.invalidToken('You are not allowed to do that'));
+};
+
+module.exports = { verifyToken, verifyAuth, verifyIsAdmin };

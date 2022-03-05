@@ -1,4 +1,5 @@
 const ApiError = require('../error/apiError');
+const moongose = require('mongoose');
 
 const validateSchema = (schema) => async (req, res, next) => {
   try {
@@ -9,4 +10,10 @@ const validateSchema = (schema) => async (req, res, next) => {
   }
 };
 
-module.exports = validateSchema;
+const verifyIsMongoId = (req, res, next) => {
+  if (moongose.isValidObjectId(req.params.id)) return next();
+
+  next(ApiError.badRequest('Invalid id'));
+};
+
+module.exports = { validateSchema, verifyIsMongoId };
