@@ -5,7 +5,6 @@ const User = require('../models/User.model');
 class userController {
   async get(req, res, next) {
     try {
-      // Get all users' data but password
       const user = await User.findById(req.params.id, { password: 0 }).exec();
       if (!user) return next(ApiError.notFound('User not found'));
 
@@ -17,7 +16,7 @@ class userController {
 
   async getAll(req, res, next) {
     try {
-      // Get all users' data but password
+      // Get all user data but password
       const users = await User.find({}, { password: 0 }).exec();
       res.status(200).json({ users });
     } catch (error) {
