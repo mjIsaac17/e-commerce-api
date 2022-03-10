@@ -14,8 +14,8 @@ const verifyToken = (req, res, next) => {
   } else next(ApiError.invalidToken('You are not authenticated'));
 };
 
+// To call verifyUser is needed to call verifyToken first
 const verifyUser = (req, res, next) => {
-  console.log(req.params.id);
   if (req.user.id === req.params.id || req.user.isAdmin) return next();
 
   next(ApiError.invalidToken('You are not allowed to do that'));

@@ -1,4 +1,3 @@
-const CryptoJS = require('crypto-js');
 const ApiError = require('../error/apiError');
 const Product = require('../models/Product.model');
 
