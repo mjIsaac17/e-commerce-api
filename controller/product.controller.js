@@ -76,22 +76,6 @@ class productController {
       next(ApiError.internalError(`products/${req.url}: ${error.message}`));
     }
   }
-
-  async stats(req, res, next) {
-    const date = new Date();
-    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
-    try {
-      //Get total products per month since last year
-      const stats = await Product.aggregate([
-        { $match: { createdAt: { $gte: lastYear } } },
-        { $project: { month: { $month: '$createdAt' } } },
-        { $group: { _id: '$month', total: { $sum: 1 } } }
-      ]);
-      res.status(200).json({ stats });
-    } catch (error) {
-      next(ApiError.internalError(`products/${req.url}: ${error.message}`));
-    }
-  }
 }
 
 module.exports = new productController();
