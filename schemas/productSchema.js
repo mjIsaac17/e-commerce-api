@@ -5,9 +5,10 @@ const createProductSchema = yup.object().shape({
   desc: yup.string().required(),
   img: yup.string().required(),
   categories: yup.array().notRequired(),
-  size: yup.string().notRequired(),
-  color: yup.string().notRequired(),
-  price: yup.number().required()
+  size: yup.array().notRequired(),
+  color: yup.array().notRequired(),
+  price: yup.number().required(),
+  inStock: yup.boolean().notRequired()
 });
 
 const updateProductSchema = yup.object().shape({
@@ -15,9 +16,10 @@ const updateProductSchema = yup.object().shape({
   desc: yup.string().notRequired(),
   img: yup.string().notRequired(),
   categories: yup.array().notRequired(),
-  size: yup.string().notRequired(),
-  color: yup.string().notRequired(),
-  price: yup.number().notRequired()
+  size: yup.array().notRequired(),
+  color: yup.array().notRequired(),
+  price: yup.number().notRequired(),
+  inStock: yup.boolean().notRequired()
 });
 
 module.exports = {

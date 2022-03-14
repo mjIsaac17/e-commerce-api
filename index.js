@@ -1,6 +1,7 @@
 const express = require('express');
 const moongose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 const ApiError = require('./error/apiError');
 const app = express();
@@ -16,6 +17,7 @@ moongose
   .catch((error) => console.log(error));
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 
 // Routes
@@ -24,6 +26,7 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/products', require('./routes/product.routes'));
 app.use('/api/carts', require('./routes/cart.routes'));
 app.use('/api/orders', require('./routes/order.routes'));
+app.use('/api/checkout', require('./routes/stripe.routes'));
 
 // 404 - Invalid route
 app.use('/', (req, res, next) => {
